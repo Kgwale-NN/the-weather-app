@@ -1,0 +1,145 @@
+.searchBar {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 100;
+  width: 100%;
+}
+
+.searchBar:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.15);
+}
+
+.searchBar.dark {
+  background: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+}
+
+.searchBar.dark:hover {
+  background: rgba(0, 0, 0, 0.35);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+}
+
+.inputWrapper {
+  flex: 1;
+}
+
+.searchButton {
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .searchBar {
+    flex-direction: column;
+    padding: 1rem;
+    width: 100%;
+  }
+
+  .inputWrapper {
+    width: 100%;
+  }
+
+  .searchButton {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .searchBar {
+    padding: 0.75rem;
+  }
+
+  .inputWrapper {
+    width: 100%;
+  }
+
+  .searchButton {
+    width: 100%;
+    padding: 0.5rem;
+  }
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  margin-top: 0.5rem;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 9999;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.dropdown.dark {
+  background: rgba(0, 0, 0, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.suggestion {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  transition: background 0.2s ease;
+}
+
+.suggestion:last-child {
+  border-bottom: none;
+}
+
+.suggestion:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.suggestion.dark:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.locationName {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.25rem;
+}
+
+.suggestion.dark .locationName {
+  color: #fff;
+}
+
+.locationDetails {
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.suggestion.dark .locationDetails {
+  color: #aaa;
+}
+
+.loading {
+  padding: 1rem;
+  text-align: center;
+  color: #666;
+}
+
+.dropdown.dark .loading {
+  color: #aaa;
+}
