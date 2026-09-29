@@ -227,7 +227,7 @@ export const weatherAPI = {
       };
     } catch (error) {
       console.error('Error fetching weather by coords:', error);
-      throw new Error('Failed to fetch weather data');
+      throw new Error('Failed to fetch weather data', { cause: error });
     }
   },
 
