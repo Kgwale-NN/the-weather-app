@@ -107,12 +107,16 @@ The checklist reflects implementation in the source code; it does not claim that
 - Create the header, body, footer, and reusable controls.
 - Style the interface with CSS Modules and global styles.
 
+
+
 ### Sprint 2: Weather and location data
 
 - Define weather and API response types.
 - Implement location search and browser geolocation.
 - Convert API responses into data for the weather components.
 - Provide hourly and daily forecast views.
+
+![Weather and location data](image-1.png)
 
 ### Sprint 3: Preferences and saved locations
 
