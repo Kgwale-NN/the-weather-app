@@ -116,7 +116,7 @@ The checklist reflects implementation in the source code; it does not claim that
 - Convert API responses into data for the weather components.
 - Provide hourly and daily forecast views.
 
-![Weather and location data](image-1.png)
+![Weather location data , Location search](image-1.png)
 
 ### Sprint 3: Preferences and saved locations
 
@@ -124,6 +124,10 @@ The checklist reflects implementation in the source code; it does not claim that
 - Persist preferences with localStorage.
 - Add theme and temperature-unit controls.
 - Provide feedback after user actions.
+
+![Save Location section](image-2.png)
+![theme and temperature-unit controls](image-3.png)
+![Example for a feedback after user action](image-4.png)
 
 ### Sprint 4: Debugging and completion
 
