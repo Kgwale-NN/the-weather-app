@@ -243,11 +243,11 @@ export const weatherAPI = {
         throw new Error(data.error.message);
       }
 
-      const forecastHours = data.forecast.forecastday[0].hour;
-      const currentHour = new Date().getHours();
+      const forecastHours: ApiForecastHour[] =
+        data.forecast.forecastday[0].hour; const currentHour = new Date().getHours();
 
       const forecast: ForecastItem[] = [];
-      let startIndex = forecastHours.findIndex((hour: any) => {
+      let startIndex = forecastHours.findIndex((hour) => {
         const hourTime = new Date(hour.time).getHours();
         return hourTime >= currentHour;
       });
@@ -270,7 +270,7 @@ export const weatherAPI = {
       return forecast;
     } catch (error) {
       console.error('Error fetching forecast by coords:', error);
-      throw new Error('Failed to fetch forecast data');
+      throw new Error('Failed to fetch forecast data', { cause: error });
     }
   },
 };
