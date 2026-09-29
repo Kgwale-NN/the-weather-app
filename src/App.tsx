@@ -37,14 +37,14 @@ function AppContent() {
         }
       });
     }
-  }, [userLocation]);
+  }, [userLocation,fetchWeatherByCoords]);
 
   // Fetch weather for current location on mount and when it changes
   useEffect(() => {
     if (currentLocation) {
       fetchWeather(currentLocation);
     }
-  }, [currentLocation, userLocation, hasAutoDetected]);
+  }, [currentLocation, userLocation, hasAutoDetected,fetchWeather]);
 
   useEffect(() => {
     setTimeout(() => {
