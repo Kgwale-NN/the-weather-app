@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState} from 'react';
 import { Sun, Cloud, CloudRain, CloudSnow, CloudLightning, CloudDrizzle } from 'lucide-react';
 import styles from './Forecast.module.css';
 import { weatherAPI } from '../../../services/weatherAPI';
@@ -24,7 +24,8 @@ export const Forecast: React.FC<ForecastProps> = ({
   location = ''
 }) => {
   const [view, setView] = useState<'hourly' | 'daily'>('hourly');
-  const [displayData, setDisplayData] = useState<ForecastItem[]>(forecastData);
+  const [dailyForecast, setDailyForecast] = useState<ForecastItem[]>([]);
+const displayData = view === 'daily' ? dailyForecast : forecastData;
   const [loading, setLoading] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -55,30 +56,28 @@ export const Forecast: React.FC<ForecastProps> = ({
     }
   };
 
-  const handleViewChange = async (newView: 'hourly' | 'daily') => {
-    setView(newView);
-    setLoading(true);
-    setIsAnimating(true);
+const handleViewChange = async (newView: 'hourly' | 'daily') => {
+  setView(newView);
+  setLoading(true);
+  setIsAnimating(true);
 
-    try {
-      if (newView === 'daily' && location) {
-        const dailyData = await weatherAPI.getDailyForecast(location);
-        setDisplayData(dailyData);
-      } else {
-        setDisplayData(forecastData);
-      }
-    } catch (error) {
-      console.error('Error switching forecast view:', error);
-      setDisplayData(forecastData);
-    } finally {
-      setLoading(false);
-      setTimeout(() => setIsAnimating(false), 300);
+  try {
+    if (newView === 'daily' && location) {
+      const dailyData = await weatherAPI.getDailyForecast(location);
+      setDailyForecast(dailyData);
+    } else {
+      setView('hourly');
     }
-  };
+  } catch (error) {
+    console.error('Error switching forecast view:', error);
+    setView('hourly');
+  } finally {
+    setLoading(false);
+    setTimeout(() => setIsAnimating(false), 300);
+  }
+};
 
-  useEffect(() => {
-    setDisplayData(forecastData);
-  }, [forecastData]);
+
 
   return (
     <div className={`${styles.forecast} ${theme === 'dark' ? styles.dark : ''}`}>
