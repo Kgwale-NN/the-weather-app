@@ -1,6 +1,14 @@
 import { type WeatherData, type ForecastItem, type SearchLocation } from '../types/weather.types';
 import { type WeatherAlert } from '../types/weather.types';
 
+type ApiSearchLocation = {
+  name: string;
+  country: string;
+  region: string;
+  lat: number;
+  lon: number;
+};
+
 // WeatherAPI.com (accurate weather data)
 const API_KEY = 'da1aeea5a0e14797a80111302260608';
 const BASE_URL = 'https://api.weatherapi.com/v1';
@@ -18,7 +26,7 @@ export const weatherAPI = {
         throw new Error(data.error.message);
       }
       
-      return data.map((item: any) => ({
+      return data.map((item: ApiSearchLocation) => ({
         name: item.name,
         country: item.country,
         region: item.region,
