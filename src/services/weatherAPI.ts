@@ -203,13 +203,15 @@ export const weatherAPI = {
       const locationData = data.location;
 
       // Process alerts if available
-      const alerts: WeatherAlert[] = data.alerts ? data.alerts.map((alert: any) => ({
-        id: alert.alert_id,
-        type: alert.severity.toLowerCase() as 'warning' | 'watch' | 'advisory' | 'moderate' | 'severe' | 'extreme' | 'minor',
-        title: alert.headline,
-        description: alert.desc,
-        time: new Date(alert.effective).toLocaleString(),
-      })) : [];
+      const alerts: WeatherAlert[] = (data.alerts?.alert ?? []).map(
+        (alert: ApiWeatherAlert) => ({
+          id: `${alert.headline}-${alert.effective}`,
+          type: alert.severity.toLowerCase() as WeatherAlert['type'],
+          title: alert.headline,
+          description: alert.desc,
+          time: new Date(alert.effective).toLocaleString(),
+        })
+      );
 
       return {
         location: locationData.name,
