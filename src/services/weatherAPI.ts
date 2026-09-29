@@ -25,6 +25,17 @@ type ApiForecastHour = {
   };
 };
 
+type ApiForecastDay = {
+  date: string;
+  day: {
+    avgtemp_c: number;
+    condition: {
+      text: string;
+      icon: string;
+    };
+  };
+};
+
 // WeatherAPI.com (accurate weather data)
 const API_KEY = 'da1aeea5a0e14797a80111302260608';
 const BASE_URL = 'https://api.weatherapi.com/v1';
@@ -156,9 +167,9 @@ export const weatherAPI = {
         throw new Error(data.error.message);
       }
 
-      const forecastDays = data.forecast.forecastday;
+      const forecastDays: ApiForecastDay[] = data.forecast.forecastday;
 
-      const forecast: ForecastItem[] = forecastDays.map((day: any) => ({
+      const forecast: ForecastItem[] = forecastDays.map((day) => ({
         time: new Date(day.date).toLocaleDateString('en-US', {
           weekday: 'short',
           month: 'short',
