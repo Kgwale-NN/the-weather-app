@@ -36,8 +36,7 @@ export const weatherAPI = {
       }));
     } catch (error) {
       console.error('Error searching location:', error);
-      throw new Error('Failed to search location');
-    }
+      throw new Error('Failed to search location', { cause: error });    }
   },
   // Get current weather for a location
   getCurrentWeather: async (location: string): Promise<WeatherData> => {
