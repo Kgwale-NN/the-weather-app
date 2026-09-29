@@ -1,19 +1,22 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 export const useGeolocation = () => {
-  const [location, setLocation] = useState<{ latitude: number; longitude: number } | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const isSupported =
+    typeof navigator !== 'undefined' && !!navigator.geolocation;
 
-  const getCurrentLocation = () => {
-    setLoading(true);
-    setError(null);
+  const [location, setLocation] = useState<{
+    latitude: number;
+    longitude: number;
+  } | null>(null);
 
-    if (!navigator.geolocation) {
-      setError('Geolocation is not supported by your browser');
-      setLoading(false);
-      return;
-    }
+  const [error, setError] = useState<string | null>(
+    isSupported ? null : 'Geolocation is not supported by your browser'
+  );
+
+  const [loading, setLoading] = useState(isSupported);
+
+  const requestLocation = useCallback(() => {
+    if (!isSupported) return;
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -21,6 +24,7 @@ export const useGeolocation = () => {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
         });
+        setError(null);
         setLoading(false);
       },
       () => {
@@ -28,12 +32,19 @@ export const useGeolocation = () => {
         setLoading(false);
       }
     );
-  };
+  }, [isSupported]);
 
-  // ADD THIS: Auto-detect location on mount
   useEffect(() => {
-    getCurrentLocation();
-  }, []);
+    requestLocation();
+  }, [requestLocation]);
+
+  const getCurrentLocation = () => {
+    if (!isSupported) return;
+
+    setLoading(true);
+    setError(null);
+    requestLocation();
+  };
 
   return { location, error, loading, getCurrentLocation };
 };
