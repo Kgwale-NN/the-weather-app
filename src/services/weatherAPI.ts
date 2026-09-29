@@ -85,8 +85,7 @@ const alerts: WeatherAlert[] = (data.alerts?.alert ?? []).map(
       };
     } catch (error) {
       console.error('Error fetching weather:', error);
-      throw new Error('Failed to fetch weather data');
-    }
+throw new Error('Failed to fetch weather data', { cause: error });    }
   },
 
   // Get weather forecast (hourly)
