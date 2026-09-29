@@ -1,7 +1,7 @@
 import { useState} from 'react';
 import { Sun, Cloud, CloudRain, CloudSnow, CloudLightning, CloudDrizzle } from 'lucide-react';
 import styles from './Forecast.module.css';
-import { weatherAPI } from '../../../services/weatherAPI';
+
 
 type ForecastItem = {
   time: string;
@@ -14,20 +14,17 @@ type ForecastProps = {
   forecastData: ForecastItem[];
   unit?: 'celsius' | 'fahrenheit';
   theme?: 'light' | 'dark';
-  location?: string;
+  dailyForecastData: ForecastItem[];
 };
 
 export const Forecast: React.FC<ForecastProps> = ({ 
   forecastData, 
   unit = 'celsius', 
   theme = 'light',
-  location = ''
+  dailyForecastData
 }) => {
   const [view, setView] = useState<'hourly' | 'daily'>('hourly');
-  const [dailyForecast, setDailyForecast] = useState<ForecastItem[]>([]);
-const displayData = view === 'daily' ? dailyForecast : forecastData;
-  const [loading, setLoading] = useState(false);
-  const [isAnimating, setIsAnimating] = useState(false);
+  const displayData = view === 'daily' ? dailyForecastData : forecastData;
 
   const convertTemperature = (temp: number) => {
     if (unit === 'fahrenheit') {
@@ -56,29 +53,6 @@ const displayData = view === 'daily' ? dailyForecast : forecastData;
     }
   };
 
-const handleViewChange = async (newView: 'hourly' | 'daily') => {
-  setView(newView);
-  setLoading(true);
-  setIsAnimating(true);
-
-  try {
-    if (newView === 'daily' && location) {
-      const dailyData = await weatherAPI.getDailyForecast(location);
-      setDailyForecast(dailyData);
-    } else {
-      setView('hourly');
-    }
-  } catch (error) {
-    console.error('Error switching forecast view:', error);
-    setView('hourly');
-  } finally {
-    setLoading(false);
-    setTimeout(() => setIsAnimating(false), 300);
-  }
-};
-
-
-
   return (
     <div className={`${styles.forecast} ${theme === 'dark' ? styles.dark : ''}`}>
       <div className={styles.header}>
@@ -88,25 +62,25 @@ const handleViewChange = async (newView: 'hourly' | 'daily') => {
         <div className={styles.toggleContainer}>
           <button
             className={`${styles.toggleButton} ${view === 'hourly' ? styles.active : ''} ${theme === 'dark' ? styles.dark : ''}`}
-            onClick={() => handleViewChange('hourly')}
-            disabled={loading}
+            onClick={() => setView('hourly')}
+
           >
             Hourly
           </button>
           <button
             className={`${styles.toggleButton} ${view === 'daily' ? styles.active : ''} ${theme === 'dark' ? styles.dark : ''}`}
-            onClick={() => handleViewChange('daily')}
-            disabled={loading}
+            onClick={() => setView('daily')}
+
           >
             Daily
           </button>
         </div>
       </div>
       
-      {loading ? (
-        <div className={styles.loading}>Loading forecast...</div>
+      {displayData.length === 0 ? (
+        <div className={styles.loading}>No saved forecast for this view. Connect and search for the location again to download it.</div>
       ) : (
-        <div className={`${styles.forecastList} ${isAnimating ? styles.fadeIn : ''}`}>
+        <div className={styles.forecastList}>
           {displayData.map((item, index) => (
             <div key={index} className={`${styles.forecastCard} ${theme === 'dark' ? styles.dark : ''}`}>
               <div className={`${styles.time} ${theme === 'dark' ? styles.dark : ''}`}>

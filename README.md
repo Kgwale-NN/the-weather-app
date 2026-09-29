@@ -364,3 +364,21 @@ Created by **Kgwale-NN** as an mLab React and TypeScript learning project.
 ## License
 
 This project is intended for educational use. No specific software license is declared in this README. Add a `LICENSE` file if you choose to publish the project under an explicit license.
+
+
+## Offline weather access
+
+The app now saves current weather, hourly forecasts, and available daily forecasts for up to 20 recently loaded locations. It restores the last viewed downloaded location and stores the download timestamp internally. Use the existing search or saved locations to reopen previously downloaded weather. Uncached locations require internet access.
+
+For offline page reloads, run:
+
+```bash
+npm run build
+npm run preview
+```
+
+Visit the preview URL online first, load your locations, and let the service worker activate before going offline. The service worker caches the app's production assets; it runs on HTTPS or localhost. Development mode (`npm run dev`) does not cache the app shell.
+
+Saved forecasts are not live readings. The app refreshes the selected query when connectivity returns. Browser storage must be available, and clearing site data removes downloaded weather.
+
+Read [OFFLINE.md](OFFLINE.md) for implementation details and a manual test checklist. Run the cache checks with `node tests/weather-cache.cjs`.

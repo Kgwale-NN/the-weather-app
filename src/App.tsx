@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { Header } from './components/header/Header';
 import { Body } from './components/body/Body';
 import { Footer } from './components/footer/Footer';
@@ -21,48 +21,25 @@ function AppContent() {
   const { theme, toggleTheme } = useTheme();
   const [unit, setUnit] = useLocalStorage<'celsius' | 'fahrenheit'>('unit', 'celsius');
   const [locations, setLocations] = useLocalStorage<Location[]>('locations', []);
-  const [currentLocation, setCurrentLocation] = useState('');
-  const [hasAutoDetected, setHasAutoDetected] = useState(false);
-  const { weatherData, forecastData, loading, error, fetchWeather, fetchWeatherByCoords } = useWeather();
+  const { weatherData, forecastData, dailyForecastData, loading, error, fetchWeather, fetchWeatherByCoords } = useWeather();
+  const requestedLocation = useRef(Boolean(weatherData));
   const { notifications, showNotification, removeNotification } = useNotification();
   const { location: userLocation } = useGeolocation();
 
-  // Fetch weather using coordinates when user location is detected
+  // Restore saved weather first; a late geolocation result must not replace a user's search.
   useEffect(() => {
-    if (userLocation) {
-      fetchWeatherByCoords(userLocation.latitude, userLocation.longitude).then((data) => {
-        if (data) {
-          setCurrentLocation(data.location);
-          setHasAutoDetected(true);
-        }
-      });
+    if (userLocation && !requestedLocation.current && navigator.onLine) {
+      requestedLocation.current = true;
+      void fetchWeatherByCoords(userLocation.latitude, userLocation.longitude);
     }
-  }, [userLocation,fetchWeatherByCoords]);
-
-  // Fetch weather for current location on mount and when it changes
-  useEffect(() => {
-    if (currentLocation) {
-      fetchWeather(currentLocation);
-    }
-  }, [currentLocation, userLocation, hasAutoDetected,fetchWeather]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      if (!currentLocation && !userLocation && !hasAutoDetected) {
-        setHasAutoDetected(true);
-      }
-    }, 3000);
-  }, [currentLocation, userLocation, hasAutoDetected]);
+  }, [userLocation, fetchWeatherByCoords]);
 
   const handleSearch = (location: string) => {
-    setCurrentLocation(location);
-    fetchWeather(location);
+    requestedLocation.current = true;
+    void fetchWeather(location);
   };
 
-  const handleSelectLocation = (location: string) => {
-    setCurrentLocation(location);
-    fetchWeather(location);
-  };
+  const handleSelectLocation = handleSearch;
 
   const handleDeleteLocation = (location: string) => {
     const updatedLocations = locations.filter(loc => loc.name !== location);
@@ -119,14 +96,16 @@ function AppContent() {
 
             <Forecast
               forecastData={forecastData}
+              dailyForecastData={dailyForecastData}
               unit={unit}
               theme={theme}
-              location={currentLocation}
+              key={weatherData.location}
             />
+
 
             <LocationList
               locations={locations}
-              currentLocation={currentLocation}
+              currentLocation={weatherData?.location || ''}
               onSelectLocation={handleSelectLocation}
               onDeleteLocation={handleDeleteLocation}
               theme={theme}
@@ -137,6 +116,8 @@ function AppContent() {
             Search for a city to see weather
           </div>
         )}
+
+
 
         <WeatherAlerts
           alerts={weatherData?.alerts || []}

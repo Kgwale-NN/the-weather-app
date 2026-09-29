@@ -22,7 +22,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSearch, theme, placehold
     // Debounce search
     useEffect(() => {
         const timer = setTimeout(async () => {
-            if (searchValue.trim().length >= 2) {
+            if (navigator.onLine && searchValue.trim().length >= 2) {
                 setLoading(true)
                 try {
                     const results = await weatherAPI.searchLocation(searchValue)
