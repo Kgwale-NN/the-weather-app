@@ -183,7 +183,7 @@ export const weatherAPI = {
       return forecast;
     } catch (error) {
       console.error('Error fetching daily forecast:', error);
-      throw new Error('Failed to fetch daily forecast data');
+      throw new Error('Failed to fetch daily forecast data', { cause: error });
     }
   },
 
