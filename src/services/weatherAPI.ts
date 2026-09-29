@@ -113,12 +113,12 @@ export const weatherAPI = {
 
       const forecastHours: ApiForecastHour[] =
         data.forecast.forecastday[0].hour;
-         const currentHour = new Date().getHours();
+      const currentHour = new Date().getHours();
 
       // Get next 24 hours of forecast starting from current hour
       const forecast: ForecastItem[] = [];
-let startIndex = forecastHours.findIndex((hour) => {
-          const hourTime = new Date(hour.time).getHours();
+      let startIndex = forecastHours.findIndex((hour) => {
+        const hourTime = new Date(hour.time).getHours();
         return hourTime >= currentHour;
       });
 
@@ -140,7 +140,7 @@ let startIndex = forecastHours.findIndex((hour) => {
       return forecast;
     } catch (error) {
       console.error('Error fetching forecast:', error);
-      throw new Error('Failed to fetch forecast data');
+      throw new Error('Failed to fetch forecast data', { cause: error });
     }
   },
 
