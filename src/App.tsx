@@ -7,7 +7,8 @@ import { CurrentWeather } from './components/body/CurrentWeather/CurrentWeather'
 import { Forecast } from './components/body/Forecast/Forecast';
 import { LocationList } from './components/body/LocationList/LocationList';
 import { WeatherAlerts } from './components/body/WeatherAlerts/WeatherAlerts';
-import { ThemeProvider, useTheme } from './context/ThemeContext';
+import { ThemeProvider } from './context/ThemeContext';
+import { useTheme } from './hooks/useTheme';
 import { useWeather } from './hooks/useWeather';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { useGeolocation } from './hooks/useGeolocation';
